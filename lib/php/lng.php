@@ -78,7 +78,7 @@ class lng
 		
 		if(!isset($__lng['phrases'][$phrase]))
 		{
-			if('error_mode' == 'exception')
+			if($__lng['error_mode'] == 'exception')
 				throw new Exception('LNG: Could not find phrase '.$phrase);
 			else if('error_mode' == 'return_id')
 				return $phrase;
