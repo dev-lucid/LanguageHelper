@@ -15,13 +15,28 @@ $__lng = array(
 
 class lng
 {
-	public static function init($language,$variant)
+	public static function init($config=array())
 	{
 		global $__lng;
-		$paths = func_get_args();
-		$__lng['language'] = array_shift($paths);
-		$__lng['variant'] = array_shift($paths);
-		$__lng['paths'] = $paths;
+		
+		foreach($config as $key=>$value)
+		{
+			if(is_array($value))
+			{
+				foreach($value as $subkey=>$subvalue)
+				{
+					$__lng[$key][$subkey] = $subvalue;
+				}
+			}
+			else
+				$__lng[$key] = $value;
+		}
+		#$language,$variant
+		
+		#$paths = func_get_args();
+		#$__lng['language'] = array_shift($paths);
+		#$__lng['variant'] = array_shift($paths);
+		#$__lng['paths'] = $paths;
 		#print_r($__lng['paths']);
 		foreach($__lng['paths'] as $path)
 		{
