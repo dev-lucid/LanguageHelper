@@ -9,12 +9,29 @@ $__lng = array(
 	'variant'=>'',
 	'phrases'=>array(),
 	'paths'=>array(),
-	'log_hook'=>null,
+	'hooks'=>array(),
 	'error_mode'=>'exception', // or 'return_id'
 );
 
 class lng
 {
+	function log($to_write)
+	{
+		global $__lng;
+		if(isset($__lng['hooks']['log']))
+		{
+			$to_write=(is_object($to_write) || is_array($to_write))?print_r($to_write,true):$to_write;
+			$__lng['hooks']['log']('LNG: '.$to_write);
+		}
+	}	
+		
+	function call_hook($hook,$p0=null,$p1=null,$p2=null,$p3=null,$p4=null,$p5=null,$p6=null)
+	{
+		global $__lng;
+		if(isset($__lng['hooks'][$hook]))
+			$__lng['hooks'][$hook]($p0,$p1,$p2,$p3,$p4,$p5,$p6);
+	}
+	
 	public static function init($config=array())
 	{
 		global $__lng;
@@ -25,8 +42,12 @@ class lng
 			{
 				foreach($value as $subkey=>$subvalue)
 				{
-					$__lng[$key][$subkey] = $subvalue;
+					if(is_numeric($subkey))
+						$__lng[$key][] = $subvalue;
+					else
+						$__lng[$key][$subkey] = $subvalue;
 				}
+
 			}
 			else
 				$__lng[$key] = $value;
@@ -54,6 +75,10 @@ class lng
 				include_once($base2);
 			}
 		}
+	}
+		
+	public static function deinit()
+	{
 	}
 	
 	public static function __callStatic($phrase,$parameters)
@@ -106,15 +131,6 @@ class lng
 		}
 		return $output;
 	}
-	
-	function log($string_to_log)
-	{
-		global $__lng;
-		if(!is_null($__lng['log_hook']))
-		{
-			$__lng['log_hook']('LNG: '.$string_to_log);
-		}
-	}	
 }
 
 ?>
