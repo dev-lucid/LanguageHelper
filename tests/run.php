@@ -5,8 +5,12 @@
 
 global $__lng;
 include_once(__DIR__.'/../lib/php/lng.php');
-lng::init('en','us',__DIR__.'/tests/dict_path1',__DIR__.'/tests/dict_path2',__DIR__.'/tests/dict_path3');
-#$__lng['log_hook'] = 'mylogger';
+lng::init(array(
+	'language'=>'en',
+	'variant'=>'us',
+	'paths'=>array(__DIR__.'/tests/dict_path1',__DIR__.'/tests/dict_path2',__DIR__.'/tests/dict_path3'),
+));
+#$__lng['hooks']['log'] = 'mylogger';
 
 global $output_path;
 $output_path = '';
